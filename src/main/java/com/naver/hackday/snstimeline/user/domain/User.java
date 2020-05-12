@@ -44,14 +44,16 @@ public class User extends BaseTimeEntity {
 
     public void addFollowing(User user) {
         if(user.getId().equals(this.id)) {
-            throw new CustomException("toId", "스스로를 구독할 수 없습니다.");
+            throw new CustomException("following-id", "스스로를 구독할 수 없습니다.");
         }
         if (!this.followings.add(user)) {
-            throw new CustomException("toId", "이미 구독중인 친구입니다.");
+            throw new CustomException("following-id", "이미 구독중인 친구입니다.");
         }
     }
 
-    public void addFollower(User user) {
-        this.followers.add(user);
+    public void cancelFollowing(User user) {
+        if(!this.followings.remove(user)) {
+            throw new CustomException("following-id", "구독중인 친구가 아닙니다.");
+        }
     }
 }

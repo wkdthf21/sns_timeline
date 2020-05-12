@@ -19,11 +19,10 @@ public class RelationService {
 
     @Transactional
     public void follow(Long id, Long followingId) {
-        User fromUser = getUserEntity(id, "id");
-        User toUser = getUserEntity(followingId, "following-id");
+        User user = getUserEntity(id, "id");
+        User followingUser = getUserEntity(followingId, "following-id");
 
-        fromUser.addFollowing(toUser);
-        toUser.addFollower(fromUser);
+        user.addFollowing(followingUser);
     }
 
     @Transactional(readOnly = true)
@@ -46,7 +45,15 @@ public class RelationService {
                 .collect(Collectors.toList());
     }
 
-    public User getUserEntity(Long id, String field) {
+    @Transactional
+    public void cancelFollow(Long id, Long followingId) {
+        User user = getUserEntity(id, "id");
+        User followingUser = getUserEntity(followingId, "following-id");
+
+        user.cancelFollowing(followingUser);
+    }
+
+    private User getUserEntity(Long id, String field) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(field, "존재하지 않는 유저입니다."));
     }

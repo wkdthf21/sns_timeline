@@ -70,8 +70,16 @@ public class RelationController {
         return ResponseEntity.status(HttpStatus.OK).body(followers);
     }
 
-    //TODO 친구 찾기
+    @ApiOperation("친구 구독 취소하기")
+    @DeleteMapping("/user/{id}/followings/{following-id}")
+    public ResponseEntity<Void> cancelFollowing(@PathVariable Long id,
+                                                @PathVariable(value = "following-id") Long followingId) {
 
-    //TODO 친구 구독 취소하기
+        relationService.cancelFollow(id, followingId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    //TODO 친구 찾기
 
 }
