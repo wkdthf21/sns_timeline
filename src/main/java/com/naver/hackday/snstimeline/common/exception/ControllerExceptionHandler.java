@@ -25,12 +25,12 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ExceptionResponseDto> notExistException(CustomException exception) {
+    public ResponseEntity<ExceptionResponseDto> notFoundException(CustomException exception) {
         ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
                 .field(exception.getField())
                 .message(exception.getMessage())
                 .build();
 
-        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
     }
 }

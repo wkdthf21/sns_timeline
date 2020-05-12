@@ -38,7 +38,7 @@ public class RelationController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "조회 성공"),
             @ApiResponse(code = 204, message = "조회 성공했으나 데이터 없음", response = Object.class),
-            @ApiResponse(code = 400, message = "잘못된 요청", response = ExceptionResponseDto.class),
+            @ApiResponse(code = 404, message = "존재하지 않는 자원", response = ExceptionResponseDto.class),
             @ApiResponse(code = 500, message = "서버 에러")
     })
     @GetMapping("/users/{id}/followings")
@@ -57,7 +57,7 @@ public class RelationController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "조회 성공"),
             @ApiResponse(code = 204, message = "조회 성공했으나 데이터 없음", response = Object.class),
-            @ApiResponse(code = 400, message = "잘못된 요청", response = ExceptionResponseDto.class),
+            @ApiResponse(code = 404, message = "존재하지 않는 자원", response = ExceptionResponseDto.class),
             @ApiResponse(code = 500, message = "서버 에러")
     })
     @GetMapping("/users/{id}/followers")
