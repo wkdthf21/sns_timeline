@@ -37,16 +37,35 @@ public class RelationController {
     @ApiOperation("내가 구독하는 친구 조회하기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "조회 성공"),
-            @ApiResponse(code = 204, message = "조회 성공했으나 데이터가 없음"),
+            @ApiResponse(code = 204, message = "조회 성공했으나 데이터 없음", response = Object.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = ExceptionResponseDto.class),
             @ApiResponse(code = 500, message = "서버 에러")
     })
     @GetMapping("/users/{id}/followings")
     public ResponseEntity<List<FollowResponseDto>> getFollowings(@PathVariable Long id) {
 
-        List<FollowResponseDto> followers = relationService.getFollowings(id);
+        List<FollowResponseDto> followings = relationService.getFollowings(id);
 
-        if (followers.size() == 0) {
+        if (followings.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(followings);
+    }
+
+    @ApiOperation("나를 구독하는 친구 조회하기")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "조회 성공"),
+            @ApiResponse(code = 204, message = "조회 성공했으나 데이터 없음", response = Object.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = ExceptionResponseDto.class),
+            @ApiResponse(code = 500, message = "서버 에러")
+    })
+    @GetMapping("/users/{id}/followers")
+    public ResponseEntity<List<FollowResponseDto>> getFollowers(@PathVariable Long id) {
+
+        List<FollowResponseDto> followers = relationService.getFollowers(id);
+
+        if (followers.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
@@ -57,6 +76,5 @@ public class RelationController {
 
     //TODO 친구 구독 취소하기
 
-    //TODO 나를 구독하는 친구 조회하기
 
 }
