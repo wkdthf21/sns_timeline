@@ -2,16 +2,17 @@ package com.naver.hackday.snstimeline.relation.controller;
 
 import com.naver.hackday.snstimeline.common.exception.ExceptionResponseDto;
 import com.naver.hackday.snstimeline.relation.controller.dto.FollowRequestDto;
+import com.naver.hackday.snstimeline.relation.controller.dto.FollowResponseDto;
 import com.naver.hackday.snstimeline.relation.service.RelationService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,7 +22,7 @@ public class RelationController {
 
     @ApiOperation("친구 구독하기")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "친구 구독 성공"),
+            @ApiResponse(code = 201, message = "구독 성공"),
             @ApiResponse(code = 400, message = "잘못된 요청", response = ExceptionResponseDto.class),
             @ApiResponse(code = 500, message = "서버 에러")
     })
@@ -33,11 +34,29 @@ public class RelationController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @ApiOperation("내가 구독하는 친구 조회하기")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "조회 성공"),
+            @ApiResponse(code = 204, message = "조회 성공했으나 데이터가 없음"),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = ExceptionResponseDto.class),
+            @ApiResponse(code = 500, message = "서버 에러")
+    })
+    @GetMapping("/users/{id}/followings")
+    public ResponseEntity<List<FollowResponseDto>> getFollowings(@PathVariable Long id) {
+
+        List<FollowResponseDto> followers = relationService.getFollowings(id);
+
+        if (followers.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(followers);
+    }
+
     //TODO 친구 찾기
 
     //TODO 친구 구독 취소하기
 
     //TODO 나를 구독하는 친구 조회하기
 
-    //TODO 내가 구독하는 친구 조회하기
 }
