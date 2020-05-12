@@ -1,7 +1,6 @@
 package com.naver.hackday.snstimeline.relation.service;
 
 import com.naver.hackday.snstimeline.common.exception.CustomException;
-import com.naver.hackday.snstimeline.relation.controller.dto.FollowRequestDto;
 import com.naver.hackday.snstimeline.relation.controller.dto.FollowResponseDto;
 import com.naver.hackday.snstimeline.user.domain.User;
 import com.naver.hackday.snstimeline.user.domain.UserRepository;
@@ -19,9 +18,9 @@ public class RelationService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void follow(FollowRequestDto requestDto) {
-        User fromUser = getUserEntity(requestDto.getFromId(), "fromId");
-        User toUser = getUserEntity(requestDto.getToId(), "toId");
+    public void follow(Long id, Long followingId) {
+        User fromUser = getUserEntity(id, "id");
+        User toUser = getUserEntity(followingId, "following-id");
 
         fromUser.addFollowing(toUser);
         toUser.addFollower(fromUser);
