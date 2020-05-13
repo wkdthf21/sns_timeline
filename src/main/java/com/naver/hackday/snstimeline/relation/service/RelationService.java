@@ -1,7 +1,7 @@
 package com.naver.hackday.snstimeline.relation.service;
 
-import com.naver.hackday.snstimeline.common.exception.CustomException;
-import com.naver.hackday.snstimeline.relation.controller.dto.FollowResponseDto;
+import com.naver.hackday.snstimeline.common.exception.NotFoundException;
+import com.naver.hackday.snstimeline.user.controller.dto.UserResponseDto;
 import com.naver.hackday.snstimeline.user.domain.User;
 import com.naver.hackday.snstimeline.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,22 +26,22 @@ public class RelationService {
     }
 
     @Transactional(readOnly = true)
-    public List<FollowResponseDto> getFollowings(Long id) {
+    public List<UserResponseDto> getFollowings(Long id) {
         User user = getUserEntity(id, "id");
 
         return user.getFollowings()
                 .stream()
-                .map(FollowResponseDto::new)
+                .map(u -> new UserResponseDto(u, user.isFollower(u), true))
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<FollowResponseDto> getFollowers(Long id) {
+    public List<UserResponseDto> getFollowers(Long id) {
         User user = getUserEntity(id, "id");
 
         return user.getFollowers()
                 .stream()
-                .map(FollowResponseDto::new)
+                .map(u -> new UserResponseDto(u, true, user.isFollowing(u)))
                 .collect(Collectors.toList());
     }
 
@@ -55,6 +55,6 @@ public class RelationService {
 
     private User getUserEntity(Long id, String field) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new CustomException(field, "존재하지 않는 유저입니다."));
+                .orElseThrow(() -> new NotFoundException(field, "존재하지 않는 유저입니다."));
     }
 }

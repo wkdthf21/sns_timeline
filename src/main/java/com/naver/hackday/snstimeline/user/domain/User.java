@@ -1,7 +1,7 @@
 package com.naver.hackday.snstimeline.user.domain;
 
 import com.naver.hackday.snstimeline.common.BaseTimeEntity;
-import com.naver.hackday.snstimeline.common.exception.CustomException;
+import com.naver.hackday.snstimeline.common.exception.NotFoundException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,17 +43,35 @@ public class User extends BaseTimeEntity {
     }
 
     public void addFollowing(User user) {
-        if(user.getId().equals(this.id)) {
-            throw new CustomException("following-id", "스스로를 구독할 수 없습니다.");
+        if (user.getId().equals(this.id)) {
+            throw new NotFoundException("following-id", "스스로를 구독할 수 없습니다.");
         }
         if (!this.followings.add(user)) {
-            throw new CustomException("following-id", "이미 구독중인 친구입니다.");
+            throw new NotFoundException("following-id", "이미 구독중인 친구입니다.");
         }
     }
 
     public void cancelFollowing(User user) {
-        if(!this.followings.remove(user)) {
-            throw new CustomException("following-id", "구독중인 친구가 아닙니다.");
+        if (!this.followings.remove(user)) {
+            throw new NotFoundException("following-id", "구독중인 친구가 아닙니다.");
         }
+    }
+
+    public Boolean isFollowing(User user) {
+        for (User u : this.getFollowings()) {
+            if (u == user) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Boolean isFollower(User user) {
+        for (User u : this.getFollowers()) {
+            if (u == user) {
+                return true;
+            }
+        }
+        return false;
     }
 }

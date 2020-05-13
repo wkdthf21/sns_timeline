@@ -1,7 +1,7 @@
 package com.naver.hackday.snstimeline.relation.controller;
 
 import com.naver.hackday.snstimeline.common.exception.ExceptionResponseDto;
-import com.naver.hackday.snstimeline.relation.controller.dto.FollowResponseDto;
+import com.naver.hackday.snstimeline.user.controller.dto.UserResponseDto;
 import com.naver.hackday.snstimeline.relation.service.RelationService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -40,9 +40,9 @@ public class RelationController {
             @ApiResponse(code = 500, message = "서버 에러")
     })
     @GetMapping("/users/{id}/followings")
-    public ResponseEntity<List<FollowResponseDto>> getFollowings(@PathVariable Long id) {
+    public ResponseEntity<List<UserResponseDto>> getFollowings(@PathVariable Long id) {
 
-        List<FollowResponseDto> followings = relationService.getFollowings(id);
+        List<UserResponseDto> followings = relationService.getFollowings(id);
 
         if (followings.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -59,9 +59,9 @@ public class RelationController {
             @ApiResponse(code = 500, message = "서버 에러")
     })
     @GetMapping("/users/{id}/followers")
-    public ResponseEntity<List<FollowResponseDto>> getFollowers(@PathVariable Long id) {
+    public ResponseEntity<List<UserResponseDto>> getFollowers(@PathVariable Long id) {
 
-        List<FollowResponseDto> followers = relationService.getFollowers(id);
+        List<UserResponseDto> followers = relationService.getFollowers(id);
 
         if (followers.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -79,7 +79,4 @@ public class RelationController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-    //TODO 친구 찾기
-
 }
