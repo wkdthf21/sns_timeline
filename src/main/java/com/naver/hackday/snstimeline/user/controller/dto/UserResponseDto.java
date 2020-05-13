@@ -1,4 +1,4 @@
-package com.naver.hackday.snstimeline.relation.controller.dto;
+package com.naver.hackday.snstimeline.user.controller.dto;
 
 import com.naver.hackday.snstimeline.user.domain.User;
 import io.swagger.annotations.ApiModelProperty;
