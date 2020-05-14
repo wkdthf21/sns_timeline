@@ -26,7 +26,7 @@ public class PostRepositoryTest {
     UserRepository userRepository;
 
     @Before
-    public void setUp(){
+    public void setUp() {
 
         // given
         User savedUser = User.builder()
@@ -71,10 +71,42 @@ public class PostRepositoryTest {
 
         // then
         assertThat(userId).isEqualTo("user1");
+        assertThat(postList.size()).isEqualTo(1);
 
         for(Post p : postList){
             assertThat(p.getContents()).isEqualTo("contents1");
         }
 
     }
+
+    @Test
+    public void Post내용수정테스트(){
+
+        // given
+        User user = userRepository.findAll().get(0);
+        Post post = postRepository.findAll().get(0);
+
+        post.modifyContents("contents2");
+        postRepository.updateContents(post);
+
+        // when
+        Post savedPost = postRepository.findAll().get(0);
+
+        // then
+        assertThat(user.getUserId()).isEqualTo("user1");
+        assertThat(savedPost.getContents()).isEqualTo("contents2");
+        assertThat(savedPost.getUser().getUserId()).isEqualTo("user1");
+
+        // when
+        List<Post> postList = user.getPostList();
+
+        // then
+        assertThat(postList.size()).isEqualTo(1);
+
+        for(Post p : postList){
+            assertThat(p.getContents()).isEqualTo("contents2");
+        }
+
+    }
+
 }
