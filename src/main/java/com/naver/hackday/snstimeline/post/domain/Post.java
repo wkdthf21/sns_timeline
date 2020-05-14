@@ -28,7 +28,14 @@ public class Post extends BaseTimeEntity {
 
     @Builder
     public Post(User user, String contents){
+
         this.user = user;
+        user.getPostList().add(this);
+
+        this.contents = contents;
+    }
+
+    public void modifyContents(String contents){
         this.contents = contents;
     }
 
