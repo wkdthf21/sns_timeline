@@ -109,4 +109,23 @@ public class PostRepositoryTest {
 
     }
 
+    @Test
+    public void Post삭제테스트(){
+
+        // given
+        Post post = postRepository.findAll().get(0);
+        postRepository.deletePostById(post);
+
+        //when
+        List<Post> postList = postRepository.findAll();
+
+        User user = userRepository.findAll().get(0);
+        List<Post> userPostList = user.getPostList();
+
+        // then
+        assertThat(postList.size()).isZero();
+        assertThat(userPostList.size()).isZero();
+
+    }
+
 }
