@@ -62,7 +62,7 @@ public class PostController {
 	// 포스트 삭제
 	@ApiOperation("포스트 삭제")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "post_id", value = "포스팅 PK", required = true, dataType = "Long", paramType = "path", defaultValue = ""),
+		@ApiImplicitParam(name = "post_id", value = "포스팅 PK", required = true, dataType = "Long", paramType = "path"),
 	})
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "포스팅 삭제 성공"),

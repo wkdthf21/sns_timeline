@@ -54,7 +54,7 @@ public class PostDetailController {
 	// 유저 개인의 피드에 있는 글 선택 OR 수정 선택 시 기존 정보 불러올 때
 	@ApiOperation("선택한 Post Entity 반환")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "post_id", value = "포스팅 PK", required = true, dataType = "Long", paramType = "path", defaultValue = ""),
+		@ApiImplicitParam(name = "post_id", value = "포스팅 PK", required = true, dataType = "Long", paramType = "path"),
 	})
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "Post Entity 조회 성공"),
