@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
+import com.naver.hackday.snstimeline.common.exception.ExceptionResponseDto;
 import com.naver.hackday.snstimeline.post.dto.PostDto;
 import com.naver.hackday.snstimeline.post.dto.PostSaveRequestDto;
 import com.naver.hackday.snstimeline.post.service.PostService;
@@ -32,7 +33,7 @@ public class PostController {
 	@ApiOperation("포스트 작성")
 	@ApiResponses({
 		@ApiResponse(code = 201, message = "포스팅 성공"),
-		@ApiResponse(code = 404, message = "존재하지 않는 유저"),
+		@ApiResponse(code = 404, message = "존재하지 않는 유저", response = ExceptionResponseDto.class),
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
 	@RequestMapping(method = RequestMethod.POST)
@@ -47,7 +48,7 @@ public class PostController {
 	@ApiOperation("포스트 수정")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "포스팅 수정 성공"),
-		@ApiResponse(code = 404, message = "존재하지 않는 포스팅"),
+		@ApiResponse(code = 404, message = "존재하지 않는 포스팅", response = ExceptionResponseDto.class),
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
 	@RequestMapping(method = RequestMethod.PUT, value = "/{post_id}")
@@ -65,7 +66,7 @@ public class PostController {
 	})
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "포스팅 삭제 성공"),
-		@ApiResponse(code = 404, message = "존재하지 않는 포스팅"),
+		@ApiResponse(code = 404, message = "존재하지 않는 포스팅", response = ExceptionResponseDto.class),
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{post_id}")
