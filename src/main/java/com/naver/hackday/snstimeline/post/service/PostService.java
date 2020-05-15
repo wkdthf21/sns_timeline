@@ -2,6 +2,7 @@ package com.naver.hackday.snstimeline.post.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -64,6 +65,15 @@ public class PostService {
 			.stream()
 			.map(PostDto::new)
 			.collect(Collectors.toList());
+	}
+
+	@Transactional
+	public PostDto getPostDetail(Long postId){
+		// Find Post
+		// Exception : Not Found Post
+		Post post = this.getPostEntity(postId);
+		// Return PostDto
+		return new PostDto(post);
 	}
 
 	private Post getPostEntity(Long id){
