@@ -1,5 +1,9 @@
 package com.naver.hackday.snstimeline.post.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -47,6 +51,19 @@ public class PostService {
 		Post post = this.getPostEntity(id);
 		// Delete Post
 		postRepository.deletePostById(post);
+	}
+	
+	@Transactional
+	public List<PostDto> searchPostList(String userId){
+		// Find User
+		// Exception : Not Found User
+		User user = this.getUserEntity(userId, "user_id");
+		// Return PostDto List
+		return postRepository.findByUserId(user)
+			.orElseGet(ArrayList<Post>::new)
+			.stream()
+			.map(PostDto::new)
+			.collect(Collectors.toList());
 	}
 
 	private Post getPostEntity(Long id){

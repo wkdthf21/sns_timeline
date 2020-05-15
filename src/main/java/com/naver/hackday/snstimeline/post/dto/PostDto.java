@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import com.naver.hackday.snstimeline.post.domain.Post;
 import com.naver.hackday.snstimeline.user.domain.User;
 
 @Getter
-@NoArgsConstructor
 public class PostDto {
 
 	private Long id;
@@ -18,4 +18,9 @@ public class PostDto {
 		this.contents = contents;
 	}
 
+	public PostDto(Post post){
+		this.id = post.getId();
+		this.user = post.getUser();
+		this.contents = post.getContents();
+	}
 }
