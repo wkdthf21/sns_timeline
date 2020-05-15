@@ -1,0 +1,36 @@
+package com.naver.hackday.snstimeline.post.service;
+
+import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+
+import com.naver.hackday.snstimeline.common.exception.NotFoundException;
+import com.naver.hackday.snstimeline.post.domain.PostRepository;
+import com.naver.hackday.snstimeline.post.dto.PostSaveRequestDto;
+import com.naver.hackday.snstimeline.user.domain.User;
+import com.naver.hackday.snstimeline.user.domain.UserRepository;
+
+@RequiredArgsConstructor
+@Service
+public class PostService {
+
+	private final UserRepository userRepository;
+	private final PostRepository postRepository;
+
+	@Transactional
+	public void uploadPost(PostSaveRequestDto postSaveRequestDto){
+		// Find User
+		// Exception : Not Found User
+		User user = this.getUserEntity(postSaveRequestDto.getUserId(), "user_id");
+		// Create Post
+		postRepository.save(postSaveRequestDto.toEntity(user));
+	}
+
+	private User getUserEntity(String userId, String field) {
+		return userRepository.findByUserId(userId)
+			.orElseThrow(() -> new NotFoundException(field, "존재하지 않는 유저입니다."));
+	}
+
+}
