@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
+import com.naver.hackday.snstimeline.post.dto.PostDto;
 import com.naver.hackday.snstimeline.post.dto.PostSaveRequestDto;
 import com.naver.hackday.snstimeline.post.service.PostService;
 
@@ -40,6 +41,21 @@ public class PostController {
 		return new ResponseEntity<>("Success Post Upload", HttpStatus.CREATED);
 	}
 
+	// 포스트 수정
+	@ApiOperation("포스트 수정")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "포스팅 수정 성공"),
+		@ApiResponse(code = 404, message = "존재하지 않는 포스팅"),
+		@ApiResponse(code = 500, message = "서버 에러")
+	})
+	@RequestMapping(method = RequestMethod.PUT, value = "/{post_id}")
+	public ResponseEntity editPostContents(@RequestBody PostDto postDto){
+		// Modify Post
+		postService.editPostContents(postDto);
+		// Return
+		return new ResponseEntity<>("Success Post Modify", HttpStatus.OK);
+	}
+
 	// 포스트 삭제
 	@ApiOperation("포스트 삭제")
 	@ApiImplicitParams({
@@ -57,6 +73,5 @@ public class PostController {
 		// Return
 		return new ResponseEntity<>("Success Post Delete", HttpStatus.OK);
 	}
-
 
 }
