@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,7 @@ import com.naver.hackday.snstimeline.post.dto.PostDto;
 import com.naver.hackday.snstimeline.post.dto.PostSaveRequestDto;
 import com.naver.hackday.snstimeline.post.service.PostService;
 
+@Api(tags = {"Post 추가/삭제/수정 API"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/posts")
