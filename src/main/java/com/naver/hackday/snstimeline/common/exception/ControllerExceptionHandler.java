@@ -1,5 +1,10 @@
 package com.naver.hackday.snstimeline.common.exception;
 
+import java.util.Iterator;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -10,6 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
+
+	private ConstraintViolationException exception;
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ExceptionResponseDto> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
@@ -32,5 +39,25 @@ public class ControllerExceptionHandler {
 			.build();
 
 		return new ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
+	}
+
+	// PathVariable 유효성 검사 실패 -> 400 request 처리
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<ExceptionResponseDto> constraintViolationException(ConstraintViolationException exception){
+		final StringBuilder resultMessageBuilder = new StringBuilder();
+		final Iterator<ConstraintViolation<?>> violationIterator = exception.getConstraintViolations().iterator();
+		while(violationIterator.hasNext()){
+			final ConstraintViolation<?> constraintViolation = violationIterator.next();
+			resultMessageBuilder.append(constraintViolation.getPropertyPath().toString());
+
+			if(violationIterator.hasNext())
+				resultMessageBuilder.append(", ");
+		}
+		ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
+			.field(resultMessageBuilder.toString())
+			.message(exception.getMessage())
+			.build();
+
+		return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
 	}
 }

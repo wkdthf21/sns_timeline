@@ -2,8 +2,13 @@ package com.naver.hackday.snstimeline.post.controller;
 
 import java.util.List;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +28,7 @@ import com.naver.hackday.snstimeline.post.dto.PostDto;
 import com.naver.hackday.snstimeline.post.service.PostService;
 
 @Api(tags = {"Post Entity 목록 / 특정한 Post Entity 리턴"})
+@Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/posts")
@@ -42,7 +48,7 @@ public class PostDetailController {
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
 	@RequestMapping(method = RequestMethod.GET, value = "/users/{user_id}")
-	public ResponseEntity<List<PostDto>> searchPostList(@PathVariable(value = "user_id") String userId){
+	public ResponseEntity<List<PostDto>> searchPostList(@PathVariable(value = "user_id") @NotEmpty String userId){
 		List<PostDto> postDtoList = postService.searchPostList(userId);
 		if(postDtoList.isEmpty())
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -62,7 +68,7 @@ public class PostDetailController {
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
 	@RequestMapping(method = RequestMethod.GET, value = "/{post_id}")
-	public ResponseEntity<PostDto> getPostDetail(@PathVariable(value = "post_id") Long postId){
+	public ResponseEntity<PostDto> getPostDetail(@PathVariable(value = "post_id") @Min(0) Long postId){
 		PostDto postDto = postService.getPostDetail(postId);
 		return new ResponseEntity<>(postDto, HttpStatus.OK);
 	}

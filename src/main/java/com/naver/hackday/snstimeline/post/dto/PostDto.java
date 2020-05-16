@@ -1,5 +1,6 @@
 package com.naver.hackday.snstimeline.post.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -16,6 +17,7 @@ import com.naver.hackday.snstimeline.user.domain.User;
 @NoArgsConstructor
 public class PostDto {
 
+	@Min(0)
 	@NotNull
 	private Long id;
 	@JsonIgnore

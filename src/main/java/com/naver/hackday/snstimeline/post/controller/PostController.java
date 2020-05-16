@@ -1,9 +1,12 @@
 package com.naver.hackday.snstimeline.post.controller;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +27,7 @@ import com.naver.hackday.snstimeline.post.dto.PostSaveRequestDto;
 import com.naver.hackday.snstimeline.post.service.PostService;
 
 @Api(tags = {"Post 추가/삭제/수정 API"})
+@Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/posts")
@@ -72,7 +76,7 @@ public class PostController {
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{post_id}")
-	public ResponseEntity deletePost(@PathVariable(value = "post_id") Long id){
+	public ResponseEntity deletePost(@PathVariable(value = "post_id") @Min(0) Long id){
 		// Delete Post
 		postService.deletePost(id);
 		// Return
