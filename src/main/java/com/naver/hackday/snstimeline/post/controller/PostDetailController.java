@@ -25,7 +25,7 @@ import com.naver.hackday.snstimeline.common.exception.ExceptionResponseDto;
 import com.naver.hackday.snstimeline.post.dto.PostDto;
 import com.naver.hackday.snstimeline.post.service.PostService;
 
-@Api(tags = {"Post Entity 목록 / 특정한 Post Entity 리턴"})
+@Api(tags = {"Post Detail API"})
 @Validated
 @RequiredArgsConstructor
 @RestController
