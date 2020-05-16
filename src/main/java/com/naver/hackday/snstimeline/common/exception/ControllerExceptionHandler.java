@@ -33,4 +33,14 @@ public class ControllerExceptionHandler {
 
         return new ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ExceptionResponseDto> badRequestException(BadRequestException exception) {
+        ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
+                .field(exception.getField())
+                .message(exception.getMessage())
+                .build();
+
+        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+    }
 }
