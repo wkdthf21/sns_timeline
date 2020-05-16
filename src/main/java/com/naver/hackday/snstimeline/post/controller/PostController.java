@@ -1,5 +1,7 @@
 package com.naver.hackday.snstimeline.post.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +39,7 @@ public class PostController {
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity uploadPost(@RequestBody PostSaveRequestDto postSaveRequestDto){
+	public ResponseEntity uploadPost(@Valid @RequestBody PostSaveRequestDto postSaveRequestDto){
 		// Upload Post
 		postService.uploadPost(postSaveRequestDto);
 		// Return
