@@ -1,7 +1,6 @@
 package com.naver.hackday.snstimeline.post.dto;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
