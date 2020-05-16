@@ -54,7 +54,7 @@ public class PostController {
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
 	@RequestMapping(method = RequestMethod.PUT, value = "/{post_id}")
-	public ResponseEntity editPostContents(@RequestBody PostDto postDto){
+	public ResponseEntity editPostContents(@Valid @RequestBody PostDto postDto){
 		// Modify Post
 		postService.editPostContents(postDto);
 		// Return
