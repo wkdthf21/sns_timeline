@@ -16,30 +16,40 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
-	private ConstraintViolationException exception;
+    private ConstraintViolationException exception;
+  
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionResponseDto> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
+        BindingResult bindingResult = exception.getBindingResult();
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ExceptionResponseDto> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
-		BindingResult bindingResult = exception.getBindingResult();
+        FieldError fieldError = bindingResult.getFieldErrors().get(0);
+        ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
+                .field(fieldError.getField())
+                .message(fieldError.getDefaultMessage())
+                .build();
 
-		FieldError fieldError = bindingResult.getFieldErrors().get(0);
-		ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
-			.field(fieldError.getField())
-			.message(fieldError.getDefaultMessage())
-			.build();
+        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+    }
 
-		return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
-	}
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> notFoundException(NotFoundException exception) {
+        ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
+                .field(exception.getField())
+                .message(exception.getMessage())
+                .build();
 
-	@ExceptionHandler(NotFoundException.class)
-	public ResponseEntity<ExceptionResponseDto> notFoundException(NotFoundException exception) {
-		ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
-			.field(exception.getField())
-			.message(exception.getMessage())
-			.build();
+        return new ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
+    }
 
-		return new ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
-	}
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ExceptionResponseDto> badRequestException(BadRequestException exception) {
+        ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
+                .field(exception.getField())
+                .message(exception.getMessage())
+                .build();
+
+        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+    }
 
 	// PathVariable 유효성 검사 실패 -> 400 request 처리
 	@ExceptionHandler(ConstraintViolationException.class)
