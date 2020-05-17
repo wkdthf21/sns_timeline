@@ -1,7 +1,10 @@
 package com.naver.hackday.snstimeline.user.domain;
 
 import com.naver.hackday.snstimeline.common.BaseTimeEntity;
+<<<<<<< HEAD
 import com.naver.hackday.snstimeline.post.domain.Post;
+=======
+>>>>>>> d8aef2e3103300b4e27433814d76ada04ed09d1b
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
