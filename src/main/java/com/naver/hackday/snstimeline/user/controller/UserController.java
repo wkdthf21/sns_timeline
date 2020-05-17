@@ -3,10 +3,7 @@ package com.naver.hackday.snstimeline.user.controller;
 import com.naver.hackday.snstimeline.common.exception.ExceptionResponseDto;
 import com.naver.hackday.snstimeline.user.controller.dto.UserSearchResponseDto;
 import com.naver.hackday.snstimeline.user.service.UserService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Api(tags = "사용자 관련 API")
 @RequiredArgsConstructor
 @RestController
 public class UserController {
