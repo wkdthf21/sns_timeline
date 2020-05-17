@@ -15,7 +15,6 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class RelationServiceTest {
@@ -40,11 +39,11 @@ public class RelationServiceTest {
         User user = new User();
         User followingUser = new User();
 
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
-        given(userRepository.findById(2L)).willReturn(Optional.of(followingUser));
+        given(userRepository.findById("test1")).willReturn(Optional.of(user));
+        given(userRepository.findById("test2")).willReturn(Optional.of(followingUser));
 
         //when
-        relationService.follow(1L, 2L);
+        relationService.follow("test1", "test2");
 
         //then
         verify(relationRepository).save(any());
@@ -55,17 +54,17 @@ public class RelationServiceTest {
         //given
         User user = new User();
 
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
-        given(userRepository.findById(2L)).willReturn(Optional.empty());
+        given(userRepository.findById("test1")).willReturn(Optional.of(user));
+        given(userRepository.findById("test2")).willReturn(Optional.empty());
 
         //when
-        relationService.follow(1L, 2L);
+        relationService.follow("test1", "test2");
     }
 
     @Test(expected = BadRequestException.class)
     public void 스스로_구독() {
         //given
-        Long id = 1L;
+        String id = "test";
 
         //when
         relationService.follow(id, id);
@@ -78,12 +77,12 @@ public class RelationServiceTest {
         User followingUser = new User();
         Relation relation = new Relation();
 
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
-        given(userRepository.findById(2L)).willReturn(Optional.of(followingUser));
+        given(userRepository.findById("test1")).willReturn(Optional.of(user));
+        given(userRepository.findById("test2")).willReturn(Optional.of(followingUser));
         given(relationRepository.findByUserAndFollowingUser(user, followingUser)).willReturn(Optional.of(relation));
 
         //when
-        relationService.follow(1L, 2L);
+        relationService.follow("test1", "test2");
     }
 
     @Test
@@ -93,12 +92,12 @@ public class RelationServiceTest {
         User followingUser = new User();
         Relation relation = new Relation();
 
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
-        given(userRepository.findById(2L)).willReturn(Optional.of(followingUser));
+        given(userRepository.findById("test1")).willReturn(Optional.of(user));
+        given(userRepository.findById("test2")).willReturn(Optional.of(followingUser));
         given(relationRepository.findByUserAndFollowingUser(user, followingUser)).willReturn(Optional.of(relation));
 
         //when
-        relationService.cancelFollow(1L, 2L);
+        relationService.cancelFollow("test1", "test2");
 
         //then
         verify(relationRepository).delete(any());
@@ -110,11 +109,11 @@ public class RelationServiceTest {
         User user = new User();
         User noFollowingUser = new User();
 
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
-        given(userRepository.findById(2L)).willReturn(Optional.of(noFollowingUser));
+        given(userRepository.findById("test1")).willReturn(Optional.of(user));
+        given(userRepository.findById("test2")).willReturn(Optional.of(noFollowingUser));
         given(relationRepository.findByUserAndFollowingUser(user, noFollowingUser)).willReturn(Optional.empty());
 
         //when
-        relationService.cancelFollow(1L, 2L);
+        relationService.cancelFollow("test1", "test2");
     }
 }
