@@ -22,12 +22,12 @@ public class RelationService {
     private final RelationRepository relationRepository;
 
     @Transactional
-    public void follow(Long id, Long followingId) {
-        if (id.equals(followingId)) {
+    public void follow(String userId, String followingId) {
+        if (userId.equals(followingId)) {
             throw new BadRequestException("followingUser-id", "스스로를 구독할 수 없습니다.");
         }
 
-        User user = getUserEntity(id, "id");
+        User user = getUserEntity(userId, "user-id");
         User followingUser = getUserEntity(followingId, "followingUser-id");
 
         if (relationRepository.findByUserAndFollowingUser(user, followingUser).isPresent()) {
@@ -41,8 +41,8 @@ public class RelationService {
     }
 
     @Transactional(readOnly = true)
-    public List<RelationUserResponseDto> getFollowings(Long id) {
-        User user = getUserEntity(id, "id");
+    public List<RelationUserResponseDto> getFollowings(String userId) {
+        User user = getUserEntity(userId, "user-id");
 
         return relationRepository.findByUser(user)
                 .stream()
@@ -51,8 +51,8 @@ public class RelationService {
     }
 
     @Transactional(readOnly = true)
-    public List<RelationUserResponseDto> getFollowers(Long id) {
-        User user = getUserEntity(id, "id");
+    public List<RelationUserResponseDto> getFollowers(String userId) {
+        User user = getUserEntity(userId, "user-id");
 
         return relationRepository.findByFollowingUser(user)
                 .stream()
@@ -61,8 +61,8 @@ public class RelationService {
     }
 
     @Transactional
-    public void cancelFollow(Long id, Long followingId) {
-        User user = getUserEntity(id, "id");
+    public void cancelFollow(String userId, String followingId) {
+        User user = getUserEntity(userId, "user-id");
         User followingUser = getUserEntity(followingId, "followingUser-id");
 
         Relation relationToCancel = relationRepository.findByUserAndFollowingUser(user, followingUser)
@@ -71,8 +71,8 @@ public class RelationService {
         relationRepository.delete(relationToCancel);
     }
 
-    private User getUserEntity(Long id, String field) {
-        return userRepository.findById(id)
+    private User getUserEntity(String userId, String field) {
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(field, "존재하지 않는 유저입니다."));
     }
 

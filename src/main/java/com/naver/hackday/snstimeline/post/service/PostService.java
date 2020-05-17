@@ -81,7 +81,7 @@ public class PostService {
 	}
 
 	private User getUserEntity(String userId, String field) {
-		return userRepository.findByUserId(userId)
+		return userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundException(field, "존재하지 않는 유저입니다."));
 	}
 

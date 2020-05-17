@@ -25,11 +25,11 @@ public class RelationController {
             @ApiResponse(code = 404, message = "존재하지 않는 자원", response = ExceptionResponseDto.class),
             @ApiResponse(code = 500, message = "서버 에러")
     })
-    @PostMapping("/users/{id}/followings/{following-id}")
-    public ResponseEntity<Void> follow(@PathVariable Long id,
-                                       @PathVariable(value = "following-id") Long followingId) {
+    @PostMapping("/users/{user-id}/followings/{following-id}")
+    public ResponseEntity<Void> follow(@PathVariable(value = "user-id") String userId,
+                                       @PathVariable(value = "following-id") String followingId) {
 
-        relationService.follow(id, followingId);
+        relationService.follow(userId, followingId);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -41,10 +41,10 @@ public class RelationController {
             @ApiResponse(code = 404, message = "존재하지 않는 자원", response = ExceptionResponseDto.class),
             @ApiResponse(code = 500, message = "서버 에러")
     })
-    @GetMapping("/users/{id}/followings")
-    public ResponseEntity<List<RelationUserResponseDto>> getFollowings(@PathVariable Long id) {
+    @GetMapping("/users/{user-id}/followings")
+    public ResponseEntity<List<RelationUserResponseDto>> getFollowings(@PathVariable(value = "user-id") String userId) {
 
-        List<RelationUserResponseDto> followings = relationService.getFollowings(id);
+        List<RelationUserResponseDto> followings = relationService.getFollowings(userId);
 
         if (followings.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -60,10 +60,10 @@ public class RelationController {
             @ApiResponse(code = 404, message = "존재하지 않는 자원", response = ExceptionResponseDto.class),
             @ApiResponse(code = 500, message = "서버 에러")
     })
-    @GetMapping("/users/{id}/followers")
-    public ResponseEntity<List<RelationUserResponseDto>> getFollowers(@PathVariable Long id) {
+    @GetMapping("/users/{user-id}/followers")
+    public ResponseEntity<List<RelationUserResponseDto>> getFollowers(@PathVariable(value = "user-id") String userId) {
 
-        List<RelationUserResponseDto> followers = relationService.getFollowers(id);
+        List<RelationUserResponseDto> followers = relationService.getFollowers(userId);
 
         if (followers.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -79,11 +79,11 @@ public class RelationController {
             @ApiResponse(code = 404, message = "존재하지 않는 자원", response = ExceptionResponseDto.class),
             @ApiResponse(code = 500, message = "서버 에러")
     })
-    @DeleteMapping("/user/{id}/followings/{following-id}")
-    public ResponseEntity<Void> cancelFollowing(@PathVariable Long id,
-                                                @PathVariable(value = "following-id") Long followingId) {
+    @DeleteMapping("/user/{user-id}/followings/{following-id}")
+    public ResponseEntity<Void> cancelFollowing(@PathVariable(value = "user-id") String userId,
+                                                @PathVariable(value = "following-id") String followingId) {
 
-        relationService.cancelFollow(id, followingId);
+        relationService.cancelFollow(userId, followingId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
