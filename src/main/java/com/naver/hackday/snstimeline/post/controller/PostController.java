@@ -56,7 +56,7 @@ public class PostController {
 		@ApiResponse(code = 404, message = "존재하지 않는 포스팅", response = ExceptionResponseDto.class),
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
-	@RequestMapping(method = RequestMethod.PUT, value = "/{post_id}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{post-id}")
 	public ResponseEntity editPostContents(@Valid @RequestBody PostDto postDto){
 		// Modify Post
 		postService.editPostContents(postDto);
@@ -67,15 +67,15 @@ public class PostController {
 	// 포스트 삭제
 	@ApiOperation("포스트 삭제")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "post_id", value = "포스팅 PK", required = true, dataType = "Long", paramType = "path", example = "1"),
+		@ApiImplicitParam(name = "post-id", value = "포스팅 PK", required = true, dataType = "Long", paramType = "path", example = "1"),
 	})
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "포스팅 삭제 성공"),
 		@ApiResponse(code = 404, message = "존재하지 않는 포스팅", response = ExceptionResponseDto.class),
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{post_id}")
-	public ResponseEntity deletePost(@PathVariable(value = "post_id") @Min(0) Long id){
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{post-id}")
+	public ResponseEntity deletePost(@PathVariable(value = "post-id") @Min(0) Long id){
 		// Delete Post
 		postService.deletePost(id);
 		// Return

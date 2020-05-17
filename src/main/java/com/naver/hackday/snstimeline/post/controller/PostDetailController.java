@@ -37,7 +37,7 @@ public class PostDetailController {
 	// 특정 유저의 Post 목록 반환
 	@ApiOperation("특정 유저의 Post Entity 목록 반환")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "user_id", value = "유저의 ID", required = true, dataType = "string", paramType = "path", defaultValue = ""),
+		@ApiImplicitParam(name = "user-id", value = "유저의 ID", required = true, dataType = "string", paramType = "path", defaultValue = ""),
 	})
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "Post Entity 목록 조회 성공"),
@@ -45,8 +45,8 @@ public class PostDetailController {
 		@ApiResponse(code = 404, message = "존재하지 않는 유저", response = ExceptionResponseDto.class),
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
-	@RequestMapping(method = RequestMethod.GET, value = "/users/{user_id}")
-	public ResponseEntity<List<PostDto>> searchPostList(@PathVariable(value = "user_id") @NotEmpty String userId){
+	@RequestMapping(method = RequestMethod.GET, value = "/users/{user-id}")
+	public ResponseEntity<List<PostDto>> searchPostList(@PathVariable(value = "user-id") @NotEmpty String userId){
 		List<PostDto> postDtoList = postService.searchPostList(userId);
 		if(postDtoList.isEmpty())
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -58,15 +58,15 @@ public class PostDetailController {
 	// 유저 개인의 피드에 있는 글 선택 OR 수정 선택 시 기존 정보 불러올 때
 	@ApiOperation("선택한 Post Entity 반환")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "post_id", value = "포스팅 PK", required = true, dataType = "Long", paramType = "path", example = "1"),
+		@ApiImplicitParam(name = "post-id", value = "포스팅 PK", required = true, dataType = "Long", paramType = "path", example = "1"),
 	})
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "Post Entity 조회 성공"),
 		@ApiResponse(code = 404, message = "존재하지 않는 포스트", response = ExceptionResponseDto.class),
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
-	@RequestMapping(method = RequestMethod.GET, value = "/{post_id}")
-	public ResponseEntity<PostDto> getPostDetail(@PathVariable(value = "post_id") @Min(0) Long postId){
+	@RequestMapping(method = RequestMethod.GET, value = "/{post-id}")
+	public ResponseEntity<PostDto> getPostDetail(@PathVariable(value = "post-id") @Min(0) Long postId){
 		PostDto postDto = postService.getPostDetail(postId);
 		return new ResponseEntity<>(postDto, HttpStatus.OK);
 	}
