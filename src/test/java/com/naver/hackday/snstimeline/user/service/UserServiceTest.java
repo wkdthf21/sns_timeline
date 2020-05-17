@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,7 @@ public class UserServiceTest {
                 .userId("redcherry")
                 .build());
 
-        given(userRepository.findByUserIdContainingOrNicknameContaining(searchKeyword, searchKeyword)).willReturn(Optional.of(givenResult));
+        given(userRepository.findByUserIdContainingOrNicknameContaining(searchKeyword, searchKeyword)).willReturn(givenResult);
 
         //when
         List<UserSearchResponseDto> searchResult = userService.searchUser(searchKeyword);
@@ -56,9 +57,9 @@ public class UserServiceTest {
         //given
         String searchKeyword = "blue";
 
-        given(userRepository.findByUserIdContainingOrNicknameContaining(searchKeyword, searchKeyword)).willReturn(Optional.empty());
+        given(userRepository.findByUserIdContainingOrNicknameContaining(searchKeyword, searchKeyword)).willReturn(Collections.emptyList());
 
         //when
-        List<UserSearchResponseDto> searchResult = userService.searchUser(searchKeyword);
+        userService.searchUser(searchKeyword);
     }
 }

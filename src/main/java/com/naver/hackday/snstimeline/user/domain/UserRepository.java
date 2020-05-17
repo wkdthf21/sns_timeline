@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<List<User>> findByUserIdContainingOrNicknameContaining(String userId, String nickname);
+    List<User> findByUserIdContainingOrNicknameContaining(String userId, String nickname);
 
     Optional<User> findByUserId(String userId);
 }

@@ -18,10 +18,15 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserSearchResponseDto> searchUser(String userIdOrNickname) {
-        return userRepository.findByUserIdContainingOrNicknameContaining(userIdOrNickname, userIdOrNickname)
-                .orElseThrow(() -> new NotFoundException("userIdOrNickname", "해당 키워드가 포함된 아이디나 닉네임을 가진 유저가 존재하지 않습니다."))
+        List<UserSearchResponseDto> searchResult = userRepository.findByUserIdContainingOrNicknameContaining(userIdOrNickname, userIdOrNickname)
                 .stream()
                 .map(UserSearchResponseDto::new)
                 .collect(Collectors.toList());
+
+        if(searchResult.isEmpty()) {
+            throw new NotFoundException("userIdOrNickname", "해당 키워드가 포함된 아이디나 닉네임을 가진 유저가 존재하지 않습니다.");
+        }
+
+        return searchResult;
     }
 }
