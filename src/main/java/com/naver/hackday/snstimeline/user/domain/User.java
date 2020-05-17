@@ -1,11 +1,17 @@
 package com.naver.hackday.snstimeline.user.domain;
 
 import com.naver.hackday.snstimeline.common.BaseTimeEntity;
+<<<<<<< HEAD
+import com.naver.hackday.snstimeline.post.domain.Post;
+=======
+>>>>>>> d8aef2e3103300b4e27433814d76ada04ed09d1b
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -17,12 +23,15 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String userId;
 
     private String nickname;
 
     private String profileUrl;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> postList = new ArrayList<Post>();
 
     @Builder
     public User(String userId, String nickname, String profileUrl) {
