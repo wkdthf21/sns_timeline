@@ -24,9 +24,11 @@ public class PostDto {
 	@Length(max=2000)
 	private String contents;
 
+	/*
 	public void setContents(String contents){
 		this.contents = contents;
 	}
+	*/
 
 	public PostDto(Post post){
 		this.id = post.getId();

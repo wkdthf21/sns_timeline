@@ -1,5 +1,8 @@
 package com.naver.hackday.snstimeline.post.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.naver.hackday.snstimeline.common.BaseTimeEntity;
 import com.naver.hackday.snstimeline.user.domain.User;
 
@@ -30,6 +33,9 @@ public class Post extends BaseTimeEntity {
 
     @Column(name = "contents", length = 2000)
     private String contents;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Image> imageList = new ArrayList<Image>();
 
     @Builder
     public Post(User user, String contents){
