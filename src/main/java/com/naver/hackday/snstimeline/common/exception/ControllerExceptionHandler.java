@@ -70,4 +70,14 @@ public class ControllerExceptionHandler {
 
 		return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
 	}
+
+    @ExceptionHandler(NoContentException.class)
+    public ResponseEntity<ExceptionResponseDto> noContentException(NoContentException exception) {
+        ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
+                .field(exception.getField())
+                .message(exception.getMessage())
+                .build();
+
+        return new ResponseEntity<>(responseDto, HttpStatus.NO_CONTENT);
+    }
 }
