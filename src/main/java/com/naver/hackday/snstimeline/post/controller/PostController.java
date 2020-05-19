@@ -58,28 +58,6 @@ public class PostController {
 		return new ResponseEntity<>("Success Post Upload", HttpStatus.CREATED);
 	}
 
-	/*
-	// 포스트 작성 - 여러 파일 업로드 - Postman에서 동작 / Swagger에서 동작 X
-	@ApiOperation("포스트 작성 - 다중 파일")
-	@ApiResponses({
-		@ApiResponse(code = 201, message = "포스팅 성공"),
-		@ApiResponse(code = 404, message = "존재하지 않는 유저", response = ExceptionResponseDto.class),
-		@ApiResponse(code = 500, message = "서버 에러")
-	})
-	@RequestMapping(method = RequestMethod.POST, value = "/multi-file")
-	public ResponseEntity uploadPostWithMultiFile(@Valid @ModelAttribute PostSaveRequestDto postSaveRequestDto,
-									@RequestPart(value = "files", required = false) List<MultipartFile> files){
-		// Upload Post
-		postService.uploadPost(postSaveRequestDto);
-
-		// Upload File
-		files.stream().map(file -> fileService.saveFile(file));
-
-		// Return
-		return new ResponseEntity<>("Success Post Upload", HttpStatus.CREATED);
-	}
-	*/
-
 	// 포스트 수정
 	@ApiOperation("포스트 수정")
 	@ApiResponses({
