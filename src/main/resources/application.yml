@@ -9,4 +9,13 @@ spring:
     username: sa
     password:
 
+  # Multiplart File 업로드 설정
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 110MB
 
+# 파일 업로드 경로
+file:
+  directory: ./uploads

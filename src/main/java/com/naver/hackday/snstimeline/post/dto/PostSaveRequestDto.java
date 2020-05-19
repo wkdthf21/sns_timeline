@@ -14,6 +14,7 @@ import com.naver.hackday.snstimeline.user.domain.User;
 @Getter
 @Setter
 @NoArgsConstructor
+/* Post Data 저장 요청 시 사용하는 Dto */
 public class PostSaveRequestDto {
 
 	@NotEmpty

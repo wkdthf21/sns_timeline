@@ -6,11 +6,14 @@ import javax.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -21,7 +24,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 import com.naver.hackday.snstimeline.common.exception.ExceptionResponseDto;
-import com.naver.hackday.snstimeline.post.dto.PostDto;
+import com.naver.hackday.snstimeline.post.dto.PostEditRequestDto;
 import com.naver.hackday.snstimeline.post.dto.PostSaveRequestDto;
 import com.naver.hackday.snstimeline.post.service.PostService;
 
@@ -35,6 +38,7 @@ public class PostController {
 	private final PostService postService;
 
 	// 포스트 작성
+	// 단일 파일 업로드 동작
 	@ApiOperation("포스트 작성")
 	@ApiResponses({
 		@ApiResponse(code = 201, message = "포스팅 성공"),
@@ -42,9 +46,14 @@ public class PostController {
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity uploadPost(@Valid @RequestBody PostSaveRequestDto postSaveRequestDto){
+	public ResponseEntity uploadPost(@Valid @ModelAttribute PostSaveRequestDto postSaveRequestDto,
+										@RequestPart(value = "file", required = false) MultipartFile file){
 		// Upload Post
-		postService.uploadPost(postSaveRequestDto);
+		if(file != null)
+			postService.uploadPost(postSaveRequestDto, file);
+		else
+			postService.uploadPost(postSaveRequestDto);
+
 		// Return
 		return new ResponseEntity<>("Success Post Upload", HttpStatus.CREATED);
 	}
@@ -57,12 +66,13 @@ public class PostController {
 		@ApiResponse(code = 500, message = "서버 에러")
 	})
 	@RequestMapping(method = RequestMethod.PUT, value = "/{post-id}")
-	public ResponseEntity editPostContents(@Valid @RequestBody PostDto postDto){
+	public ResponseEntity editPostContents(@Valid @RequestBody PostEditRequestDto postEditRequestDto){
 		// Modify Post
-		postService.editPostContents(postDto);
+		postService.editPostContents(postEditRequestDto);
 		// Return
 		return new ResponseEntity<>("Success Post Modify", HttpStatus.OK);
 	}
+
 
 	// 포스트 삭제
 	@ApiOperation("포스트 삭제")
