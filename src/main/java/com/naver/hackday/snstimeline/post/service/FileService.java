@@ -24,7 +24,7 @@ public class FileService {
 	private static final String ILLEGAL_EXP = "[:\\\\/%*?:|\"<>].";
 
 	public FileService(FileUploadConfig fileUploadProperty){
-		this.fileLocation = Paths.get(fileUploadProperty.getUploadDirectory())
+		this.fileLocation = Paths.get(fileUploadProperty.getDirectory())
 			.toAbsolutePath().normalize();
 		try {
 			Files.createDirectories(this.fileLocation);
@@ -46,7 +46,6 @@ public class FileService {
 		// 파일 고유 이름 생성
 		UUID uuid = UUID.randomUUID();
 		String newFileName = uuid.toString() + extension;
-		System.out.println("file name - " + newFileName);
 
 		try{
 			Path targetLocation = this.fileLocation.resolve(newFileName);
