@@ -2,15 +2,13 @@ package com.naver.hackday.snstimeline.post.service;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -33,13 +31,10 @@ public class FileServiceTest {
 	public void saveFile() throws Exception {
 
 		// given
-		String path = System.getProperty("user.dir");
-		String fileName = "test_img.png";
-		String fileFullPath = path + "/" + fileName;
-		File file = new File(fileFullPath);
+		ClassPathResource cpr = new ClassPathResource("test_img.png");
 
-		MultipartFile multipartFile = new MockMultipartFile(fileFullPath, fileName, null,
-			new FileInputStream(file));
+		MultipartFile multipartFile = new MockMultipartFile( cpr.getPath(), "test_img.png", null,
+			cpr.getInputStream());
 
 		// when
 		savedFileName = fileService.saveFile(multipartFile);
