@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import com.naver.hackday.snstimeline.timeline.service.TimelineService;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class PostService {
 
 	private final UserRepository userRepository;
 	private final PostRepository postRepository;
+	private final TimelineService timelineService;
 
 	@Transactional
 	public void uploadPost(PostSaveRequestDto postSaveRequestDto){
@@ -31,7 +33,9 @@ public class PostService {
 		// Exception : Not Found User
 		User user = this.getUserEntity(postSaveRequestDto.getUserId(), "user_id");
 		// Create Post
-		postRepository.save(postSaveRequestDto.toEntity(user));
+		Post post = postRepository.save(postSaveRequestDto.toEntity(user));
+
+		timelineService.addTimeline(post);
 	}
 
 	@Transactional
