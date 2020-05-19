@@ -34,8 +34,9 @@ public class Post extends BaseTimeEntity {
     @Column(name = "contents", length = 2000)
     private String contents;
 
+    @JsonIgnoreProperties("post")
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Image> imageList = new ArrayList<Image>();
+    private List<PostFile> postFileList = new ArrayList<PostFile>();
 
     @Builder
     public Post(User user, String contents){

@@ -10,7 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,29 +19,29 @@ import com.naver.hackday.snstimeline.common.BaseTimeEntity;
 
 @Getter
 @NoArgsConstructor
-@Table(name = "images")
+@Table(name = "post_files")
 @Entity
-public class Image extends BaseTimeEntity {
+public class PostFile extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "image_id")
+	@Column(name = "file_id")
 	private Long id;
 
 	@ManyToOne(targetEntity = Post.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id", nullable = false)
 	private Post post;
 
-	@Column(name = "images_url", length = 200)
-	private String imagesUrl;
+	@Column(name = "url", length = 200)
+	private String url;
 
 	@Builder
-	public Image(Post post, String imagesUrl){
+	public PostFile(Post post, String url){
 
 		this.post = post;
-		post.getImageList().add(this);
+		post.getPostFileList().add(this);
 
-		this.imagesUrl = imagesUrl;
+		this.url = url;
 	}
 
 }
