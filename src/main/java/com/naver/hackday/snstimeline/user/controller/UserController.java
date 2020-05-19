@@ -1,7 +1,7 @@
 package com.naver.hackday.snstimeline.user.controller;
 
 import com.naver.hackday.snstimeline.common.exception.ExceptionResponseDto;
-import com.naver.hackday.snstimeline.user.controller.dto.UserSearchResponseDto;
+import com.naver.hackday.snstimeline.user.controller.dto.UserResponseDto;
 import com.naver.hackday.snstimeline.user.service.UserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api(tags = "사용자 관련 API")
+@Api(tags = "User API")
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -28,8 +28,8 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 에러")
     })
     @GetMapping("/user-search")
-    public ResponseEntity<List<UserSearchResponseDto>> searchUser(@RequestParam String userIdOrNickname) {
-        List<UserSearchResponseDto> users = userService.searchUser(userIdOrNickname);
+    public ResponseEntity<List<UserResponseDto>> searchUser(@RequestParam String userIdOrNickname) {
+        List<UserResponseDto> users = userService.searchUser(userIdOrNickname);
 
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }

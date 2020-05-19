@@ -1,7 +1,7 @@
 package com.naver.hackday.snstimeline.user.service;
 
 import com.naver.hackday.snstimeline.common.exception.NotFoundException;
-import com.naver.hackday.snstimeline.user.controller.dto.UserSearchResponseDto;
+import com.naver.hackday.snstimeline.user.controller.dto.UserResponseDto;
 import com.naver.hackday.snstimeline.user.domain.User;
 import com.naver.hackday.snstimeline.user.domain.UserRepository;
 import org.junit.Before;
@@ -12,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -46,7 +45,7 @@ public class UserServiceTest {
         given(userRepository.findByUserIdContainingOrNicknameContaining(searchKeyword, searchKeyword)).willReturn(givenResult);
 
         //when
-        List<UserSearchResponseDto> searchResult = userService.searchUser(searchKeyword);
+        List<UserResponseDto> searchResult = userService.searchUser(searchKeyword);
 
         //then
         assertThat(searchResult.size()).isEqualTo(2);
