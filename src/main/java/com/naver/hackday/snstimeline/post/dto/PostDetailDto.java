@@ -1,5 +1,8 @@
 package com.naver.hackday.snstimeline.post.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -9,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import com.naver.hackday.snstimeline.post.domain.Image;
 import com.naver.hackday.snstimeline.post.domain.Post;
 import com.naver.hackday.snstimeline.user.domain.User;
 
@@ -23,16 +27,16 @@ public class PostDto {
 	private User user;
 	@Length(max=2000)
 	private String contents;
+	private List<ImageDto> fileList = new ArrayList<>();
 
-	/*
-	public void setContents(String contents){
-		this.contents = contents;
-	}
-	*/
-
-	public PostDto(Post post){
+	public PostDto(Post post, List<Image> imageList){
 		this.id = post.getId();
 		this.user = post.getUser();
 		this.contents = post.getContents();
+		for(Image image : imageList){
+			fileList.add(ImageDto.builder()
+							.fileDownloadUri(image.getImagesUrl())
+							.build());
+		}
 	}
 }
