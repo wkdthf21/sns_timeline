@@ -11,6 +11,7 @@ import com.naver.hackday.snstimeline.timeline.domain.TimelineRepository;
 import com.naver.hackday.snstimeline.user.domain.User;
 import com.naver.hackday.snstimeline.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,9 @@ public class TimelineService {
     private final UserRepository userRepository;
     private final RelationRepository relationRepository;
 
+    @Cacheable(value = "timelines", key = "#userId")
     public List<TimelineResponseDto> getTimeline(String userId) {
+
         User user = getUserEntity(userId, "user-id");
         List<Timeline> timelines = timelineRepository.findByUser(user);
 

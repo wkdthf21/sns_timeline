@@ -4,6 +4,7 @@ import com.naver.hackday.snstimeline.common.exception.BadRequestException;
 import com.naver.hackday.snstimeline.common.exception.NotFoundException;
 import com.naver.hackday.snstimeline.relation.domain.Relation;
 import com.naver.hackday.snstimeline.relation.domain.RelationRepository;
+import com.naver.hackday.snstimeline.timeline.service.TimelineService;
 import com.naver.hackday.snstimeline.user.domain.User;
 import com.naver.hackday.snstimeline.user.domain.UserRepository;
 import org.junit.Before;
@@ -27,10 +28,13 @@ public class RelationServiceTest {
     @Mock
     private RelationRepository relationRepository;
 
+    @Mock
+    private TimelineService timelineService;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        relationService = new RelationService(userRepository, relationRepository);
+        relationService = new RelationService(userRepository, relationRepository, timelineService);
     }
 
     @Test
