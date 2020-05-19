@@ -5,8 +5,10 @@ import com.naver.hackday.snstimeline.common.exception.NotFoundException;
 import com.naver.hackday.snstimeline.relation.domain.Relation;
 import com.naver.hackday.snstimeline.relation.domain.RelationRepository;
 import com.naver.hackday.snstimeline.relation.controller.dto.RelationUserResponseDto;
+import com.naver.hackday.snstimeline.timeline.service.TimelineService;
 import com.naver.hackday.snstimeline.user.domain.User;
 import com.naver.hackday.snstimeline.user.domain.UserRepository;
+import com.naver.hackday.snstimeline.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ public class RelationService {
 
     private final UserRepository userRepository;
     private final RelationRepository relationRepository;
+    private final TimelineService timelineService;
 
     @Transactional
     public void follow(String userId, String followingId) {
@@ -34,10 +37,12 @@ public class RelationService {
             throw new BadRequestException("followingUser-id", "이미 구독중인 친구입니다.");
         }
 
-        relationRepository.save(Relation.builder()
+        Relation relation = relationRepository.save(Relation.builder()
                 .user(user)
                 .followingUser(followingUser)
                 .build());
+
+        timelineService.addTimeline(relation);
     }
 
     @Transactional(readOnly = true)

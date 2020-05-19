@@ -43,7 +43,17 @@ public class TimelineService {
         for (Relation relation : relationRepository.findByFollowingUser(writer)) {
             timelineRepository.save((Timeline.builder()
                     .relation(relation)
-                    .post(post).build()));
+                    .post(post)
+                    .build()));
+        }
+    }
+
+    public void addTimeline(Relation relation) {
+        for (Post post : relation.getFollowingUser().getPostList()) {
+            timelineRepository.save(Timeline.builder()
+                    .relation(relation)
+                    .post(post)
+                    .build());
         }
     }
 
