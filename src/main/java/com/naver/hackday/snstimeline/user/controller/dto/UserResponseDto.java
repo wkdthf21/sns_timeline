@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class UserResponseDto {
 
-    @ApiModelProperty(notes = "로그인 아이디", example = "test1", required = true, position = 1)
+    @ApiModelProperty(notes = "유저 아이디", example = "test1", required = true, position = 1)
     private String userId;
 
     @ApiModelProperty(notes = "닉네임", example = "테스트1", position = 2)
