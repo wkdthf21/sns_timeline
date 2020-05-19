@@ -1,5 +1,6 @@
 package com.naver.hackday.snstimeline.timeline.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.naver.hackday.snstimeline.post.domain.Post;
 import com.naver.hackday.snstimeline.timeline.domain.Timeline;
 import com.naver.hackday.snstimeline.user.controller.dto.UserResponseDto;
@@ -11,6 +12,9 @@ import java.time.LocalDateTime;
 
 @Getter
 public class TimelineResponseDto {
+
+    @JsonIgnore
+    private Long id;
 
     @ApiModelProperty(notes = "작성자 정보", position = 1)
     private UserResponseDto writer;
@@ -25,6 +29,8 @@ public class TimelineResponseDto {
     private LocalDateTime createdDate;
 
     public TimelineResponseDto(Timeline timeline) {
+        id = timeline.getId();
+
         User writer = timeline.getRelation().getFollowingUser();
         this.writer = new UserResponseDto(writer);
 

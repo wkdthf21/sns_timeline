@@ -11,6 +11,7 @@ import com.naver.hackday.snstimeline.timeline.domain.TimelineRepository;
 import com.naver.hackday.snstimeline.user.domain.User;
 import com.naver.hackday.snstimeline.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -44,20 +45,53 @@ public class TimelineService {
         User writer = post.getUser();
 
         for (Relation relation : relationRepository.findByFollowingUser(writer)) {
-            timelineRepository.save((Timeline.builder()
+            Timeline timeline = timelineRepository.save((Timeline.builder()
                     .relation(relation)
                     .post(post)
                     .build()));
+            updateAddCache(relation.getUser().getUserId(), timeline);
         }
     }
 
     public void addTimeline(Relation relation) {
         for (Post post : relation.getFollowingUser().getPostList()) {
-            timelineRepository.save(Timeline.builder()
+            Timeline timeline = timelineRepository.save(Timeline.builder()
                     .relation(relation)
                     .post(post)
                     .build());
+            updateAddCache(relation.getUser().getUserId(), timeline);
         }
+    }
+
+    public void deleteTimeline(Post post) {
+        User writer = post.getUser();
+
+        for (Relation relation : relationRepository.findByFollowingUser(writer)) {
+            Timeline timeline = timelineRepository.findByRelationAndPost(relation, post);
+            updateDeleteCache(relation.getUser().getUserId(), timeline);
+        }
+    }
+
+    public void deleteTimeline(Relation relation) {
+        for (Post post : relation.getFollowingUser().getPostList()) {
+            Timeline timeline = timelineRepository.findByRelationAndPost(relation, post);
+            updateDeleteCache(relation.getUser().getUserId(), timeline);
+        }
+    }
+
+    @CachePut(value = "timelines", key = "#userId")
+    public List<TimelineResponseDto> updateAddCache(String userId, Timeline timeline) {
+        List<TimelineResponseDto> result = getTimeline(userId);
+        result.add(new TimelineResponseDto(timeline));
+        return result;
+    }
+
+    @CachePut(value = "timelines", key = "#userId")
+    public List<TimelineResponseDto> updateDeleteCache(String userId, Timeline timeline) {
+        List<TimelineResponseDto> result = getTimeline(userId);
+        result.remove(new TimelineResponseDto(timeline));
+        return result;
+
     }
 
     private User getUserEntity(String userId, String field) {

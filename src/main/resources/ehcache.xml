@@ -23,7 +23,7 @@
            timeToLiveSeconds="0"
            overflowToDisk="false"
            diskPersistent="false"
-           diskExpiryThreadIntervalSeconds="120"
+           diskExpiryThreadIntervalSeconds="3600"
            memoryStoreEvictionPolicy="LRU">
     </cache>
 </ehcache>

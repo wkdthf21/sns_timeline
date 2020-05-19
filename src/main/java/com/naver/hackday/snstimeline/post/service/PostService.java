@@ -53,6 +53,8 @@ public class PostService {
 		// Find Post
 		// Exception : Not Found Post
 		Post post = this.getPostEntity(id);
+
+		timelineService.deleteTimeline(post);
 		// Delete Post
 		postRepository.deletePostById(post);
 	}
