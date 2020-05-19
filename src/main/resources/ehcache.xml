@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+         maxBytesLocalHeap="300M"
+         updateCheck="false">
+
+    <diskStore path="java.io.tmpdir"/>
+    <sizeOfPolicy maxDepth="100000"/>
+
+    <!-- default Cache 설정 (반드시 선언해야 하는 Cache) -->
+    <defaultCache
+            timeToIdleSeconds="0"
+            timeToLiveSeconds="0"
+            overflowToDisk="false"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU">
+    </defaultCache>
+
+    <!--15일-->
+    <cache name="timelines"
+           timeToIdleSeconds="1296000"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           diskPersistent="false"
+           diskExpiryThreadIntervalSeconds="120"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+</ehcache>
