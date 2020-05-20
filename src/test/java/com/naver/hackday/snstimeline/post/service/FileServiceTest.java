@@ -14,9 +14,10 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.naver.hackday.snstimeline.SnsTimelineApplication;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = SnsTimelineApplication.class)
 public class FileServiceTest {
 
 	@Autowired
