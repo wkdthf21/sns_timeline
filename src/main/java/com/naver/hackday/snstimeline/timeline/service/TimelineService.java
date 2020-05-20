@@ -31,10 +31,12 @@ public class TimelineService {
     private final static Logger LOG = Logger.getGlobal();
 
 
+    /* 캐쉬 사용 함수 */
+    /* 캐쉬 사용 시 메소드 실행 하지 않음 - 프린터문 출력되지 않음 */
     @Cacheable(value = "timelines", key = "#userId")
     public List<TimelineResponseDto> getTimeline(String userId) {
 
-        LOG.info("======== Get Timeline Data Not Using Cache!!!!! ==========");
+        LOG.info("======== Get Timeline Data Not Using Cache!!!!!");
         User user = getUserEntity(userId, "user-id");
         List<Timeline> timelines = timelineRepository.findByUser(user);
 
@@ -47,6 +49,9 @@ public class TimelineService {
                 .collect(Collectors.toList());
     }
 
+    /* 팔로잉한 유저가 글을 쓸 경우 */
+    /* Timeline DB 에 데이터 추가 */
+    /* 글 쓴 유저를 팔로우한 모든 회원의 Cache에 timeline 데이터 추가 */
     public void addTimeline(Post post) {
         User writer = post.getUser();
 
@@ -65,6 +70,9 @@ public class TimelineService {
         }
     }
 
+    /* 유저를 팔로우 했을 경우 */
+    /* Timeline DB 에 데이터 추가 */
+    /* 유저를 팔로우 한 회원의 Cache에 timeline 데이터 추가 */
     public void addTimeline(Relation relation) {
 
         for (Post post : relation.getFollowingUser().getPostList()) {
@@ -83,6 +91,7 @@ public class TimelineService {
     }
 
     /* 포스트 내용 변경 시 */
+    /* 포스트를 쓴 유저를 팔로우 한 유저들의 Cache에 접근 및 갱신 */
     public void editTimelineWithPost(Post post){
 
         // Load Timeline From DB with Post Id
@@ -95,11 +104,12 @@ public class TimelineService {
             //update cache
             List<TimelineResponseDto> timelineResponseDtoList = getTimeline(followerId);
             cacheUpdateService.updateAddCache(followerId, timelineResponseDtoList);
-
         }
-
     }
 
+    /* 포스트가 삭제되었을 시 */
+    /* 포스트한 유저를 팔로우 한 회원들의 Cache에 접근하여 갱신 */
+    /* Timeline DB 갱신 */
     public void deleteTimeline(Post post) {
 
         User writer = post.getUser();
@@ -111,6 +121,9 @@ public class TimelineService {
         }
     }
 
+    /* A 유저를 언팔로우 했을 경우 */
+    /* A가 쓴 글을 언팔로우한 유저의 Cache에서 삭제 */
+    /* Timeline DB도 갱신 */
     public void deleteTimeline(Relation relation) {
 
         for (Post post : relation.getFollowingUser().getPostList()) {
@@ -121,6 +134,8 @@ public class TimelineService {
         }
     }
 
+    /* A 유저를 언팔로우 했을 경우 */
+    /* A가 쓴 글을 언팔로우한 유저의 Cache에서 삭제 */
     private void deleteCache(Relation relation, Post post) {
         String followerId = relation.getUser().getUserId();
         Timeline timeline = timelineRepository.findByRelationAndPost(relation, post);
