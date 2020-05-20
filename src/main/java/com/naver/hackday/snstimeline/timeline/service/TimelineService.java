@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
 @RequiredArgsConstructor
 @Service
@@ -26,9 +27,14 @@ public class TimelineService {
     private final UserRepository userRepository;
     private final RelationRepository relationRepository;
 
+    private final CacheUpdateService cacheUpdateService;
+
+    private final static Logger LOG = Logger.getGlobal();
+
     @Cacheable(value = "timelines", key = "#userId")
     public List<TimelineResponseDto> getTimeline(String userId) {
 
+        LOG.info("======== Get Timeline Data Not Using Cache!!!!! ==========");
         User user = getUserEntity(userId, "user-id");
         List<Timeline> timelines = timelineRepository.findByUser(user);
 
@@ -45,21 +51,34 @@ public class TimelineService {
         User writer = post.getUser();
 
         for (Relation relation : relationRepository.findByFollowingUser(writer)) {
-            Timeline timeline = timelineRepository.save((Timeline.builder()
-                    .relation(relation)
-                    .post(post)
-                    .build()));
-            updateAddCache(relation.getUser().getUserId(), timeline);
+            String followerId = relation.getUser().getUserId();
+
+            // save database
+            Timeline timeline = timelineRepository.save(Timeline.builder()
+                .relation(relation)
+                .post(post)
+                .build());
+
+            //update cache
+            List<TimelineResponseDto> timelineResponseDtoList = getTimeline(followerId);
+            cacheUpdateService.updateAddCache(followerId, timelineResponseDtoList);
         }
     }
 
     public void addTimeline(Relation relation) {
+
         for (Post post : relation.getFollowingUser().getPostList()) {
+
+            String followerId = relation.getUser().getUserId();
+            // save database
             Timeline timeline = timelineRepository.save(Timeline.builder()
                     .relation(relation)
                     .post(post)
                     .build());
-            updateAddCache(relation.getUser().getUserId(), timeline);
+
+            //update cache
+            List<TimelineResponseDto> timelineResponseDtoList = getTimeline(followerId);
+            cacheUpdateService.updateAddCache(followerId, timelineResponseDtoList);
         }
     }
 
@@ -77,13 +96,6 @@ public class TimelineService {
             Timeline timeline = timelineRepository.findByRelationAndPost(relation, post);
             updateDeleteCache(relation.getUser().getUserId(), timeline);
         }
-    }
-
-    @CachePut(value = "timelines", key = "#userId")
-    public List<TimelineResponseDto> updateAddCache(String userId, Timeline timeline) {
-        List<TimelineResponseDto> result = getTimeline(userId);
-        result.add(new TimelineResponseDto(timeline));
-        return result;
     }
 
     @CachePut(value = "timelines", key = "#userId")

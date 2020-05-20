@@ -4,7 +4,6 @@ import com.naver.hackday.snstimeline.common.BaseTimeEntity;
 import com.naver.hackday.snstimeline.post.domain.Post;
 import com.naver.hackday.snstimeline.relation.domain.Relation;
 import com.naver.hackday.snstimeline.user.domain.User;
-import com.sun.org.glassfish.external.arc.Taxonomy;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
