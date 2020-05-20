@@ -33,6 +33,7 @@ public class TimelineService {
 
     /* 캐쉬 사용 함수 */
     /* 캐쉬 사용 시 메소드 실행 하지 않음 - 프린터문 출력되지 않음 */
+    /* 캐쉬에 값이 없으면 메소드가 실행되고, 캐쉬에 값이 있으면 메소드가 실행되지 않는다 */
     @Cacheable(value = "timelines", key = "#userId")
     public List<TimelineResponseDto> getTimeline(String userId) {
 
