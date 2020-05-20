@@ -25,9 +25,4 @@ public class CacheUpdateService {
 		return timelineResponseDtoList;
 	}
 
-	@CacheEvict(value = "timelines", key = "#userId", allEntries = true)
-	public void deleteCache(String userId){
-		LOG.info("======== Delete All Cache!!!!!");
-	}
-
 }
