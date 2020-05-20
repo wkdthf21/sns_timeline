@@ -3,6 +3,9 @@ package com.naver.hackday.snstimeline.timeline.service;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.transaction.Transactional;
+
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,11 @@ public class CacheUpdateService {
 	public List<TimelineResponseDto> updateAddCache(String userId, List<TimelineResponseDto> timelineResponseDtoList) {
 		LOG.info("======== Update Cache!!!!! ==========");
 		return timelineResponseDtoList;
+	}
+
+	@CacheEvict(value = "timelines", key = "#userId", allEntries = true)
+	public void deleteCache(String userId){
+		LOG.info("======== Delete All Cache!!!!! ==========");
 	}
 
 }

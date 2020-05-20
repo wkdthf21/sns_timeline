@@ -54,11 +54,13 @@ public class PostService {
 		// Exception : Not Found Post
 		Post post = this.getPostEntity(id);
 
+		// Delete Timeline related Post
 		timelineService.deleteTimeline(post);
+
 		// Delete Post
 		postRepository.deletePostById(post);
 	}
-	
+
 	@Transactional
 	public List<PostDto> searchPostList(String userId){
 		// Find User

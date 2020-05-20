@@ -73,8 +73,10 @@ public class RelationService {
         Relation relationToCancel = relationRepository.findByUserAndFollowingUser(user, followingUser)
                 .orElseThrow(() -> new BadRequestException("followingUser-id", "구독중인 친구가 아닙니다."));
 
+        System.out.println(relationToCancel.getUser().getUserId() + "가 " + relationToCancel.getFollowingUser().getUserId() + "를 팔로우하는 관계를 취소하자 ! ");
         timelineService.deleteTimeline(relationToCancel);
         relationRepository.delete(relationToCancel);
+        System.out.println("relation 도 삭제 완료");
     }
 
     private User getUserEntity(String userId, String field) {

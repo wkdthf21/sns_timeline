@@ -11,7 +11,6 @@ import com.naver.hackday.snstimeline.timeline.domain.TimelineRepository;
 import com.naver.hackday.snstimeline.user.domain.User;
 import com.naver.hackday.snstimeline.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +29,7 @@ public class TimelineService {
     private final CacheUpdateService cacheUpdateService;
 
     private final static Logger LOG = Logger.getGlobal();
+
 
     @Cacheable(value = "timelines", key = "#userId")
     public List<TimelineResponseDto> getTimeline(String userId) {
@@ -83,27 +83,33 @@ public class TimelineService {
     }
 
     public void deleteTimeline(Post post) {
-        User writer = post.getUser();
 
+        User writer = post.getUser();
         for (Relation relation : relationRepository.findByFollowingUser(writer)) {
-            Timeline timeline = timelineRepository.findByRelationAndPost(relation, post);
-            updateDeleteCache(relation.getUser().getUserId(), timeline);
+            deleteCache(relation, post);
         }
     }
 
     public void deleteTimeline(Relation relation) {
+
         for (Post post : relation.getFollowingUser().getPostList()) {
-            Timeline timeline = timelineRepository.findByRelationAndPost(relation, post);
-            updateDeleteCache(relation.getUser().getUserId(), timeline);
+            deleteCache(relation, post);
         }
     }
 
-    @CachePut(value = "timelines", key = "#userId")
-    public List<TimelineResponseDto> updateDeleteCache(String userId, Timeline timeline) {
-        List<TimelineResponseDto> result = getTimeline(userId);
-        result.remove(new TimelineResponseDto(timeline));
-        return result;
+    private void deleteCache(Relation relation, Post post) {
+        String followerId = relation.getUser().getUserId();
+        Timeline timeline = timelineRepository.findByRelationAndPost(relation, post);
 
+        List<TimelineResponseDto> timelineResponseDtoList = getTimeline(followerId);
+        for(TimelineResponseDto timelineResponseDto : timelineResponseDtoList){
+            if(timelineResponseDto.getId() == timeline.getId()) {
+                timelineResponseDtoList.remove(timelineResponseDto);
+                break;
+            }
+        }
+
+        cacheUpdateService.updateAddCache(followerId, timelineResponseDtoList);
     }
 
     private User getUserEntity(String userId, String field) {
