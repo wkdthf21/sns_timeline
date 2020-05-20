@@ -61,25 +61,6 @@ public class PostRepositoryTest {
     }
 
     @Test
-    public void User와Post관계Test(){
-
-        // when
-        User user = userRepository.findAll().get(0);
-        String userId = user.getUserId();
-
-        List<Post> postList = user.getPostList();
-
-        // then
-        assertThat(userId).isEqualTo("user1");
-        assertThat(postList.size()).isEqualTo(1);
-
-        for(Post p : postList){
-            assertThat(p.getContents()).isEqualTo("contents1");
-        }
-
-    }
-
-    @Test
     public void Post내용수정테스트(){
 
         // given
@@ -96,16 +77,6 @@ public class PostRepositoryTest {
         assertThat(user.getUserId()).isEqualTo("user1");
         assertThat(savedPost.getContents()).isEqualTo("contents2");
         assertThat(savedPost.getUser().getUserId()).isEqualTo("user1");
-
-        // when
-        List<Post> postList = user.getPostList();
-
-        // then
-        assertThat(postList.size()).isEqualTo(1);
-
-        for(Post p : postList){
-            assertThat(p.getContents()).isEqualTo("contents2");
-        }
 
     }
 
