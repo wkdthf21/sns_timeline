@@ -13,8 +13,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.naver.hackday.snstimeline.SnsTimelineApplication;
+
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = SnsTimelineApplication.class)
 public class UserRepositoryTest {
 
     @Autowired
