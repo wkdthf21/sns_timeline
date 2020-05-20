@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "구독 관련 API")
+@Api(tags = "Relation API")
 @RequiredArgsConstructor
 @RestController
 public class RelationController {

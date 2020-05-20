@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import com.naver.hackday.snstimeline.timeline.service.TimelineService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -31,15 +32,21 @@ public class PostService {
 	private final PostRepository postRepository;
 	private final PostFileRepository postFileRepository;
 
+	private final TimelineService timelineService;
 	private final FileService fileService;
+
 
 	@Transactional
 	public void uploadPost(PostSaveRequestDto postSaveRequestDto){
 		// Find User
 		// Exception : Not Found User
 		User user = this.getUserEntity(postSaveRequestDto.getUserId(), "user_id");
+
 		// Save Post Data
 		Post post = postRepository.save(postSaveRequestDto.toEntity(user));
+
+		// Save Timeline Data
+		timelineService.addTimeline(post);
 	}
 
 	@Transactional
@@ -70,6 +77,8 @@ public class PostService {
 		// Modify Post
 		post.modifyContents(postEditRequestDto.getContents());
 		postRepository.updateContents(post);
+		// Modify Timeline & Cache
+		timelineService.editTimelineWithPost(post);
 	}
 
 	@Transactional
@@ -78,11 +87,14 @@ public class PostService {
 		// Exception : Not Found Post
 		Post post = this.getPostEntity(id);
 
-		// Delete Post
+		// Delete Timeline related Post
+		timelineService.deleteTimeline(post);
+
+		// Delete Post and File
 		postFileRepository.deleteFilesByPostId(post);
 		postRepository.deletePostById(post);
 	}
-	
+
 	@Transactional
 	public List<PostDetailDto> searchPostList(String userId){
 		// Find User

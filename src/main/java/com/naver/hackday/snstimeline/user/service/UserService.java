@@ -1,7 +1,7 @@
 package com.naver.hackday.snstimeline.user.service;
 
 import com.naver.hackday.snstimeline.common.exception.NotFoundException;
-import com.naver.hackday.snstimeline.user.controller.dto.UserSearchResponseDto;
+import com.naver.hackday.snstimeline.user.controller.dto.UserResponseDto;
 import com.naver.hackday.snstimeline.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,10 +17,10 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public List<UserSearchResponseDto> searchUser(String userIdOrNickname) {
-        List<UserSearchResponseDto> searchResult = userRepository.findByUserIdContainingOrNicknameContaining(userIdOrNickname, userIdOrNickname)
+    public List<UserResponseDto> searchUser(String userIdOrNickname) {
+        List<UserResponseDto> searchResult = userRepository.findByUserIdContainingOrNicknameContaining(userIdOrNickname, userIdOrNickname)
                 .stream()
-                .map(UserSearchResponseDto::new)
+                .map(UserResponseDto::new)
                 .collect(Collectors.toList());
 
         if(searchResult.isEmpty()) {

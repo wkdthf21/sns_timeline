@@ -1,6 +1,5 @@
 package com.naver.hackday.snstimeline.common.exception;
 
-import java.io.File;
 import java.util.Iterator;
 
 import javax.validation.ConstraintViolation;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
-
-    private ConstraintViolationException exception;
   
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponseDto> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
@@ -72,6 +69,16 @@ public class ControllerExceptionHandler {
 		return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
 	}
 
+    @ExceptionHandler(NoContentException.class)
+    public ResponseEntity<ExceptionResponseDto> noContentException(NoContentException exception) {
+        ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
+                .field(exception.getField())
+                .message(exception.getMessage())
+                .build();
+
+        return new ResponseEntity<>(responseDto, HttpStatus.NO_CONTENT);
+    }
+
 	@ExceptionHandler(FileUploadDownloadException.class)
 	public ResponseEntity<ExceptionResponseDto> fileUploadDownloadException(FileUploadDownloadException exception) {
 		ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
@@ -81,7 +88,5 @@ public class ControllerExceptionHandler {
 
 		return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
 	}
-
-
 
 }
