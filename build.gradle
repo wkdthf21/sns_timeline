@@ -26,6 +26,7 @@ dependencies {
     implementation 'net.sf.ehcache:ehcache:2.10.6'
     implementation 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
 
     implementation 'io.springfox:springfox-swagger2:2.9.2'
