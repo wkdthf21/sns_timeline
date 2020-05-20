@@ -21,13 +21,13 @@ public class CacheUpdateService {
 
 	@CachePut(value = "timelines", key = "#userId")
 	public List<TimelineResponseDto> updateAddCache(String userId, List<TimelineResponseDto> timelineResponseDtoList) {
-		LOG.info("======== Update Cache!!!!! ==========");
+		LOG.info("======== Update Cache!!!!!");
 		return timelineResponseDtoList;
 	}
 
 	@CacheEvict(value = "timelines", key = "#userId", allEntries = true)
 	public void deleteCache(String userId){
-		LOG.info("======== Delete All Cache!!!!! ==========");
+		LOG.info("======== Delete All Cache!!!!!");
 	}
 
 }

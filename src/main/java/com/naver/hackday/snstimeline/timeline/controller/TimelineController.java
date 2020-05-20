@@ -41,7 +41,7 @@ public class TimelineController {
         List<TimelineResponseDto> result = timelineService.getTimeline(userId);
         long end = System.currentTimeMillis();
         long timeTaken = end - start;
-        LOG.info("=============수행 시간 : " + timeTaken);
+        LOG.info("============= 수행 시간 : " + timeTaken);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
