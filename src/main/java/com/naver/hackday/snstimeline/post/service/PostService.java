@@ -46,6 +46,8 @@ public class PostService {
 		// Modify Post
 		post.modifyContents(postDto.getContents());
 		postRepository.updateContents(post);
+		// Modify Timeline & Cache
+		timelineService.editTimelineWithPost(post);
 	}
 
 	@Transactional

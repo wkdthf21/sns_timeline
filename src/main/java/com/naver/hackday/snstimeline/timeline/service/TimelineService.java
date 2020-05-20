@@ -82,6 +82,24 @@ public class TimelineService {
         }
     }
 
+    /* 포스트 내용 변경 시 */
+    public void editTimelineWithPost(Post post){
+
+        // Load Timeline From DB with Post Id
+        User writer = post.getUser();
+
+        for (Relation relation : relationRepository.findByFollowingUser(writer)) {
+
+            String followerId = relation.getUser().getUserId();
+
+            //update cache
+            List<TimelineResponseDto> timelineResponseDtoList = getTimeline(followerId);
+            cacheUpdateService.updateAddCache(followerId, timelineResponseDtoList);
+
+        }
+
+    }
+
     public void deleteTimeline(Post post) {
 
         User writer = post.getUser();
