@@ -37,8 +37,12 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
 }
 
 test {
     useJUnitPlatform()
 }
+

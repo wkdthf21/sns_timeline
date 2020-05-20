@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
-
-    private ConstraintViolationException exception;
   
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponseDto> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
@@ -80,4 +78,15 @@ public class ControllerExceptionHandler {
 
         return new ResponseEntity<>(responseDto, HttpStatus.NO_CONTENT);
     }
+
+	@ExceptionHandler(FileUploadDownloadException.class)
+	public ResponseEntity<ExceptionResponseDto> fileUploadDownloadException(FileUploadDownloadException exception) {
+		ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
+			.field(exception.getField())
+			.message(exception.getMessage())
+			.build();
+
+		return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+	}
+
 }
