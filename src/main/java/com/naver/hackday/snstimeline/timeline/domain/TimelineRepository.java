@@ -17,13 +17,6 @@ public interface TimelineRepository extends JpaRepository<Timeline, Long> {
     List<Timeline> findByUser(User user);
 
     Timeline findByRelationAndPost(Relation relation, Post post);
-
-    int deleteByPost(Post post);
-
-    @Transactional
-    @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query(value = "delete from Timeline T where T.post.id in :#{#postIds} and T.relation.id = :#{#relation.id}", nativeQuery = false)
-    int deleteAllByPostIdAndRelationId(@Param("postIds") List<Long> postIds, @Param("relation") Relation relation);
-
+    void deleteByRelationAndPost(Relation relation, Post post);
 
 }

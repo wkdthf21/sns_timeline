@@ -104,14 +104,20 @@ public class TimelineService {
 
         User writer = post.getUser();
         for (Relation relation : relationRepository.findByFollowingUser(writer)) {
+            // Update to Delete Cache
             deleteCache(relation, post);
+            // Delete Database
+            timelineRepository.deleteByRelationAndPost(relation, post);
         }
     }
 
     public void deleteTimeline(Relation relation) {
 
         for (Post post : relation.getFollowingUser().getPostList()) {
+            // Update to Delete Cache
             deleteCache(relation, post);
+            // Delete Database
+            timelineRepository.deleteByRelationAndPost(relation, post);
         }
     }
 
@@ -126,7 +132,6 @@ public class TimelineService {
                 break;
             }
         }
-
         cacheUpdateService.updateAddCache(followerId, timelineResponseDtoList);
     }
 
