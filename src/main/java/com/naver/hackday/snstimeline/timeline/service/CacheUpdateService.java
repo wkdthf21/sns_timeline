@@ -20,9 +20,15 @@ public class CacheUpdateService {
 	private final static Logger LOG = Logger.getGlobal();
 
 	@CachePut(value = "timelines", key = "#userId")
-	public List<TimelineResponseDto> updateAddCache(String userId, List<TimelineResponseDto> timelineResponseDtoList) {
+	public List<TimelineResponseDto> addCache(String userId, List<TimelineResponseDto> timelineResponseDtoList) {
 		LOG.info("======== Update Cache!!!!!");
 		return timelineResponseDtoList;
+	}
+
+	@CacheEvict(value = "timelines", key = "#userId")
+	public void deleteCache(String userId){
+		LOG.info("======== Delete Cache!!!!!");
+		return ;
 	}
 
 }
