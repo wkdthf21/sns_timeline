@@ -60,15 +60,13 @@ public class TimelineService {
             String followerId = relation.getUser().getUserId();
 
             // save database
-            Timeline timeline = timelineRepository.save(Timeline.builder()
-                .relation(relation)
-                .post(post)
-                .build());
+            timelineRepository.save(Timeline.builder()
+                    .relation(relation)
+                    .post(post)
+                    .build());
 
             //update cache
-            List<TimelineResponseDto> timelineResponseDtoList = getTimeline(followerId);
-            cacheUpdateService.deleteCache(followerId);
-            cacheUpdateService.addCache(followerId, timelineResponseDtoList);
+            updateFollowerCache(followerId);
         }
     }
 
@@ -81,15 +79,13 @@ public class TimelineService {
 
             String followerId = relation.getUser().getUserId();
             // save database
-            Timeline timeline = timelineRepository.save(Timeline.builder()
-                    .relation(relation)
-                    .post(post)
-                    .build());
+            timelineRepository.save(Timeline.builder()
+                        .relation(relation)
+                        .post(post)
+                        .build());
 
             //update cache
-            List<TimelineResponseDto> timelineResponseDtoList = getTimeline(followerId);
-            cacheUpdateService.deleteCache(followerId);
-            cacheUpdateService.addCache(followerId, timelineResponseDtoList);
+            updateFollowerCache(followerId);
         }
     }
 
@@ -103,11 +99,8 @@ public class TimelineService {
         for (Relation relation : relationRepository.findByFollowingUser(writer)) {
 
             String followerId = relation.getUser().getUserId();
-
             //update cache
-            List<TimelineResponseDto> timelineResponseDtoList = getTimeline(followerId);
-            cacheUpdateService.deleteCache(followerId);
-            cacheUpdateService.addCache(followerId, timelineResponseDtoList);
+            updateFollowerCache(followerId);
         }
     }
 
@@ -138,8 +131,19 @@ public class TimelineService {
         }
     }
 
+
+    /* 팔로잉한 유저의 포스트 추가 / 삭제 혹은 새로 팔로우한 유저가 생성되었을 경우 */
+    /* 팔로워 유저들의 Cache에 데이터들을 추가 */
+    private void updateFollowerCache(String followerId){
+
+        List<TimelineResponseDto> timelineResponseDtoList = getTimeline(followerId);
+        cacheUpdateService.deleteCache(followerId);
+        cacheUpdateService.addCache(followerId, timelineResponseDtoList);
+
+    }
+
     /* A 유저를 언팔로우 했을 경우와 팔로우한 유저의 포스트가 삭제되었을 시 */
-    /* 팔로워 유저들의 데이터들을 Cache에서 삭제 */
+    /* 팔로워 유저들의 Cache에서 관련 데이터들을 삭제 */
     private void deleteFollowerCache(Relation relation, Post post) {
 
         String followerId = relation.getUser().getUserId();
