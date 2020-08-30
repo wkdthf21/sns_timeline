@@ -1,5 +1,6 @@
 package com.naver.hackday.snstimeline.post.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -9,11 +10,13 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import org.h2.store.fs.FileUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.naver.hackday.snstimeline.common.exception.FileDeleteException;
 import com.naver.hackday.snstimeline.common.exception.FileUploadDownloadException;
 import com.naver.hackday.snstimeline.config.FileUploadConfig;
 
@@ -57,6 +60,32 @@ public class FileService {
 		}
 	}
 
+	/**
+	 * Delete File
+	 * @param multiFile
+	 */
+	public void deleteFile(String filename) {
+		
+		File file = new File(Paths.get(fileLocation.toString(), filename).toString());
+		
+		if(file.exists()) {
+			if(file.isDirectory()) {
+				File[] files = file.listFiles();
+				for(int i = 0; i < files.length; i++) {
+					if(!files[i].delete()) {
+						throw new FileDeleteException("File Delete", "Error");
+					}
+				}
+			}
+			if(!file.delete()) {
+				throw new FileDeleteException("File Delete", "Error");
+			}
+		}else {
+			throw new FileDeleteException("File Delete", "Not Found File");
+		}
+	}
+	
+	
 	/* 파일 다운로드 함수 */
 	public Resource downloadFileAsResource(String fileName){
 

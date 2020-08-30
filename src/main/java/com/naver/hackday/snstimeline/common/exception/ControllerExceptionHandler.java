@@ -88,5 +88,15 @@ public class ControllerExceptionHandler {
 
 		return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(FileDeleteException.class)
+	public ResponseEntity<ExceptionResponseDto> fileDeleteException(FileDeleteException exception) {
+		ExceptionResponseDto responseDto = ExceptionResponseDto.builder()
+			.field(exception.getField())
+			.message(exception.getMessage())
+			.build();
+
+		return new ResponseEntity<>(responseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 }
